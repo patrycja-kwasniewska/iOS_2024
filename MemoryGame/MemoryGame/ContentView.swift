@@ -8,14 +8,17 @@
 import SwiftUI
 
 struct ContentView: View {
-    let availableCards = ["😀", "😂", "😎", "🥳", "😇", "😜", "🤩", "🤔"]
+    let availableCards = ["😀", "😂", "😎", "🥳", "😇", "😜", "🤩", "🤔", "🤯", "🤡", "👅", "🫀", "🦁", "🦊", "🥰", "😅"]
+    
     @State private var displayedCards: [String] = ["😀", "😂"]
     
     func adjustCardNumber(by offset: Int, symbol: String) -> some View {
-        Button(action: {
-            let newCount = displayedCards.count + offset
+        let isDisabled = displayedCards.count + offset < 2 || displayedCards.count + offset > availableCards.count //jesli ilosc mniejsza od 2 lub wieksza niz dostepne karty
+        
+        return Button(action: {
+            let newCount = displayedCards.count + offset //ilosc wyswietlanych aktualnie kart
             
-            if newCount >= 2 && newCount <= availableCards.count {
+            if newCount >= 2 && newCount <= availableCards.count { //jesli aktualna ilosc w <2;max>
                 if offset > 0 {
                     let additionalCards = availableCards[displayedCards.count..<newCount]
                     displayedCards.append(contentsOf: additionalCards)
@@ -24,11 +27,11 @@ struct ContentView: View {
                 }
             }
         }) {
-            Image(systemName: symbol)
+            Image(systemName: symbol) //styl przycisku
                 .font(.largeTitle)
-                .foregroundColor(.blue)
+                .foregroundColor(isDisabled ? .gray : .blue)
         }
-        .disabled(displayedCards.count + offset < 2 || displayedCards.count + offset > availableCards.count)
+        .disabled(isDisabled)
     }
     
     var body: some View {
